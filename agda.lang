@@ -1,37 +1,120 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+ This file is part of GtkSourceView
+
+ Authors: Yu-Ren Pan
+ Copyright (C) 2020 Yu-Ren Pan <yuren.pan.0117@gmail.com>
+
+ GtkSourceView is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
+
+ GtkSourceView is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
+
+ You should have received a copy of the GNU Lesser General Public License
+ along with this library; if not, see <http://www.gnu.org/licenses/>.
+
+-->
 <language id="agda" name="Agda" version="2.0" _section="Source">
+  <!--
+    Lexical Structure:
+    https://agda.readthedocs.io/en/latest/language/lexical-structure.html
+  -->
   <metadata>
     <!--<property name="mimetypes">text/x-agda</property>-->
     <property name="globs">*.agda</property>
-    <property name="line-comment-start">--</property>
+    <property name="line-comment-start">__</property>
+    <property name="block-comment-start">{-</property>
+    <property name="block-comment-end">-}</property>
   </metadata>
 
   <styles>
-    <style id="pragma"      name="Pragma"      map-to="def:preprocessor"/>
-    <style id="pragma-name" name="Pragma Name" map-to="def:special-constant"/>
-    <style id="comment"     name="Comment"     map-to="def:comment"/>
-    <style id="hole"        name="Hole"        map-to="def:note"/>
-    <style id="variable"    name="Variable"                        />
-    <style id="symbol"      name="Symbol"      map-to="def:keyword"/>
-    <style id="constant"    name="Constant"    map-to="def:constant"/>
-    <style id="keyword"     name="Keyword"     map-to="def:keyword"/>
-    <style id="module"      name="Module"      map-to="def:function"/>
-    <style id="type"        name="Type"        map-to="def:type"/>
-    <style id="function"    name="Function"    map-to="def:function"/>
-    <style id="string"      name="String"      map-to="def:string"/>
-    <style id="character"   name="Character"   map-to="def:character"/>
-    <style id="char-escape" name="Escaped Character" map-to="def:special-char"/>
-    <style id="numeric"     name="Numeric"     map-to="def:number"/>
+    <!-- Aspect commands -->
+    <!--
+      Aspect commands:
+        comment         Comments.
+        pragma          Text occurring in pragmas that does not have a more
+                          specific (syntactic) aspect.
+        keyword         Keywords.
+        string          Strings.
+        number          Numbers.
+        symbol          Symbols like forall, =, ->, etc.
+        primitive-type  Primitive types (like Set and Prop).
+    -->
+    <style id="comment"        name="Comment"           map-to="def:comment"/>
+    <style id="pragma"         name="Pragma"            map-to="def:preprocessor"/>
+    <style id="pragma-name"    name="Pragma Name"       map-to="def:keyword"/>
+    <style id="keyword"        name="Keyword"           map-to="def:keyword"/>
+    <style id="string"         name="String"            map-to="def:string"/>
+    <style id="character"      name="Character"         map-to="def:string"/>
+    <style id="char-escape"    name="Escaped Character" map-to="def:special-char"/>
+    <style id="number"         name="Number"            map-to="def:number"/>
+    <style id="symbol"         name="Symbol"            map-to="def:keyword"/>
+    <style id="primitive-type" name="Primitive Type"    map-to="def:constant"/>
+    <!--
+      NameKind commands:
+        bound                    Bound variables.
+        generalizable            Generalizable variables.
+        inductive-constructor    Inductive constructors.
+        coinductive-constructor  Coinductive constructors.
+        datatype                 Data types.
+        field                    Record fields.
+        function                 Functions.
+        macro                    Macros.
+        module                   Module names.
+        postulate                Postulates.
+        primitive                Primitive functions.
+        record                   Record types.
+    -->
+    <style id="bound"                   name="Bound variable"/>
+    <style id="generalizable"           name="Generalizable variable"/>
+    <style id="inductive-constructor"   name="Inductive constructor"   map-to="def:function"/>
+    <style id="coinductive-constructor" name="Coinductive constructor" map-to="def:function"/>
+    <style id="datatype"  name="Data Type"           map-to="def:type"/>
+    <style id="field"     name="Record fields"       map-to="def:type"/>
+    <style id="datatype"  name="Data Type"           map-to="def:type"/>
+    <style id="function"  name="Function"            map-to="def:function"/>
+    <style id="module"    name="Module name"         map-to="def:function"/>
+    <style id="postulate" name="Postulate"           map-to="def:type"/>
+    <style id="primitive" name="Primitive function"  map-to="def:builtin"/>
+    <style id="record"    name="Record Type"         map-to="def:type"/>
+    <!--
+      Other aspect commands:
+        dotted-pattern          Dotted patterns.
+        unsolved-meta           Unsolved meta variables.
+        unsolved-constraint     Unsolved constraints, not connected to meta
+                                  variables.
+        termination-problem     Termination problems.
+        incomplete-pattern      Incomplete patterns.
+        error                   Errors.
+        type-checks             Code which is being type-checked.
+        deadcode                Deadcode (like unreachable clauses or RHS).
+        shadowing-in-telescope  Shadowed repeated variable names in telescopes.
+    -->
+    <style id="dotted-pattern"      name="Dotted pattern"/>
+    <style id="unsolved-meta"       name="Unsolved meta variable" map-to="def:warning"/>
+    <style id="unsolved-constraint" name="Unsolved constraint" map-to="def:warning"/>
+    <style id="termination-problem" name="Termination problem" map-to="def:warning"/>
+    <style id="incomplete-pattern"  name="Incomplete pattern" map-to="def:warning"/>
+    <style id="error"       name="Error"    map-to="def:error"/>
+    <style id="type-checks" name="type-checked code"/>
+    <style id="deadcode"    name="Deadcode" map-to="def:error"/>
+    <style id="shadowing-in-telescope" name="Shadowed repeated variable names"/>
+    <!-- Misc -->
+    <style id="hole" name="Hole" map-to="def:mark"/>
   </styles>
 
+  <keyword-char-class>(?:[^\s;\{\}\(\)"])</keyword-char-class>
+
   <definitions>
-    <!--
-      Lexical Structure:
-      https://agda.readthedocs.io/en/latest/language/lexical-structure.html
-    -->
   
     <context id="line-comment" style-ref="comment" end-at-line-end="true" class="comment" class-disabled="no-spell-check">
-      <start>(?&lt;!\p{S})--+(?!\p{S})</start>
+      <start>\%[--</start>
       <include>
         <context ref="def:in-comment"/>
         <context ref="haddock:line-paragraph"/>
@@ -56,155 +139,79 @@
       <include>
         <context style-ref="pragma-name">
           <match extended="true">
-            BUILTIN |
-            CATCHALL |
-            DISPLAY |
-            ETA |
-            FOREIGN |
-            COMPILE |
-            IMPOSSIBLE |
-            INJECTIVE |
-            INLINE |
-            NOINLINE |
-            MEASURE |
-            NO_TERMINATION_CHECK |
-            NO_POSITIVITY_CHECK |
-            NO_UNIVERSE_CHECK |
-            NON_TERMINATING |
-            OPTIONS |
-            POLARITY |
-            WARNING_ON_USAGE |
-            REWRITE |
-            STATIC |
-            TERMINATING
+            BUILTIN | CATCHALL | COMPILE | DISPLAY | ETA | FOREIGN |
+            IMPOSSIBLE | INJECTIVE | INLINE | MEASURE | NO_POSITIVITY_CHECK |
+            NO_TERMINATION_CHECK | NO_UNIVERSE_CHECK | NOINLINE | NON_COVERING |
+            NON_TERMINATING | OPTIONS | POLARITY | REWRITE | STATIC |
+            TERMINATING | WARNING_ON_IMPORT | WARNING_ON_USAGE
           </match>
         </context>
+        <context ref="string-literal"/>
       </include>
     </context>
 
     <context id="agda-hole" style-ref="hole">
       <start>\{!</start>
       <end>!\}\??</end>
+      <include>
+        <context ref="agda-hole"/>
+      </include>
     </context>
-    
+
     <define-regex id="special-symbol">[\.;\{\}\(\)@"]</define-regex>
-    <define-regex id="keyword-symbol" extended="true">
-      = | \| | -> | → | : | \? | \\ | λ | \.\. | \.\.\. | … | ∀
+    <define-regex id="key-symbol" extended="true">
+      = | \| | -> | → | : | \? | \\ | λ | \.\. | \.\.\. | … | ∀ | forall
     </define-regex>
-    <define-regex id="keyword-word" extended="true">
-      abstract | constructor | data | do | eta-equality | field | forall |
-      hiding | import | in | inductive | infix | infixl | infixr | instance |
-      let | macro | module | mutual | no-eta-equality | open | overlap |
-      pattern | postulate | primitive | private | public | quote |
-      quoteContext | quoteGoal | quoteTerm | record | renaming | rewrite |
-      Set | syntax | tactic | unquote | unquoteDecl | unquoteDef | using |
-      variable | where | with
+    <define-regex id="key-keyword" extended="true">
+      abstract | constructor | data | do | eta-equality | field | hiding |
+      import | in | inductive | infix | infixl | infixr | instance | let |
+      macro | module | mutual | no-eta-equality | open | overlap | pattern |
+      postulate | primitive | private | public | quote | quoteContext |
+      quoteGoal | quoteTerm | record | renaming | rewrite | syntax | tactic |
+      unquote | unquoteDecl | unquoteDef | using | variable | where | with
     </define-regex>
+    <define-regex id="sub-num">₀|₁|₂|₃|₄|₅|₆|₇|₈|₉</define-regex>
+    <define-regex id="key-primitive-type" extended="true">
+      ( Set | Prop | Setω ) ( [0-9]* | ( \%{sub-num} )* )
+    </define-regex>
+
+    <context id="agda-symbol"    style-ref="symbol"         extend-parent="false">
+      <match>\%[\%{key-symbol}\%]</match>
+    </context>
+    <context id="agda-keyword"   style-ref="keyword"        extend-parent="false">
+      <match>\%[\%{key-keyword}\%]</match>
+    </context>
+    <context id="agda-primitive" style-ref="primitive-type" extend-parent="false">
+      <match>\%[\%{key-primitive-type}\%]</match>
+    </context>
+
     <define-regex id="name-part" extended="true">
-      (?&lt;= ^ | [\s\._] )
+      (?&lt;= ^ | [\s\._;\{\}\(\)@"] )
       (?!
-        (?: \%{keyword-symbol} | \%{keyword-word} )
-        (?: [\s\._] | $)
-      )                     # cannot be one of the keywords above
-      [^\s\._;\{\}\(\)@"']  # cannot start with a single quote
-      [^\s\._;\{\}\(\)@"]*
-      (?= [\s\._] | $)
+        (?: \%{key-symbol} | \%{key-keyword} | \%{key-primitive-type} )
+        (?: [\s\._;\{\}\(\)@"] | $)
+      )                          # cannot be one of the keywords above
+      (?:
+           [^\s\._;\{\}\(\)@"'\\-]   |
+        \\ [^\s\._;\{\}\(\)@"\p{L}]  |
+        -  [^\s\._;\{\}\(\)@"-]
+      )                          # cannot start with ' , \x , or --
+      [^\s\._;\{\}\(\)@"] *
+      (?= [\s\._;\{\}\(\)@"] | $)
     </define-regex>
     <define-regex id="name" extended="true">
       _ |
       _? \%{name-part} (?: _ \%{name-part} )* _?
     </define-regex>
     <define-regex id="qualified">\%{name}(?:\.\%{name})*</define-regex>
-    
-    <define-regex id="sub-num">₀|₁|₂|₃|₄|₅|₆|₇|₈|₉</define-regex>
-    <context id="agda-const" style-ref="constant">
-      <match extended="true">
-        (?&lt;!\P{Z}) 
-        ( Set | Prop | Setω )
-        ( [0-9]* | ( \%{sub-num} )* )
-        (?!\P{Z})
-      </match>
+
+    <context id="just-name"                   extend-parent="false">
+      <match>\%[\%{name}\%]</match>
+    </context>
+    <context id="first-name" once-only="true" extend-parent="false">
+      <match>\%[\%{name}\%]</match>
     </context>
     
-    <context id="agda-symbol" style-ref="symbol">
-      <match extended="true">
-        (?&lt;!\P{Z}) \%{keyword-symbol} (?!\P{Z})
-      </match>
-    </context>
-
-    <context id="agda-keyword" style-ref="keyword">
-      <match extended="true">
-        (?&lt;!\P{Z}) \%{keyword-word} (?!\P{Z})
-      </match>
-    </context>
-    
-    <context id="module-declaration">
-      <match extended="true">
-        (module) \s+ (\%{qualified}) (?!\P{Z})
-      </match>
-      <include>
-        <context sub-pattern="1" style-ref="keyword"/>
-        <context sub-pattern="2" style-ref="module"/>
-        <context sub-pattern="3" style-ref="keyword"/>
-      </include>
-    </context>
-
-    <context id="import">
-      <match extended="true">
-        (import) \s+ (\%{qualified})
-          (?: \s+ (as) \s+ (\%{qualified}) )?
-        (?!\P{Z})
-      </match>
-      <include>
-        <context sub-pattern="1" style-ref="keyword"/>
-        <context sub-pattern="2" style-ref="module"/>
-        <context sub-pattern="3" style-ref="keyword"/>
-        <context sub-pattern="4" style-ref="module"/>
-      </include>
-    </context>
-
-    <context id="open">
-      <match extended="true">
-        (open) \s+ (?: (import|module) \s+)? (\%{qualified}) (?!\P{Z})
-      </match>
-      <include>
-        <context sub-pattern="1" style-ref="keyword"/>
-        <context sub-pattern="2" style-ref="keyword"/>
-        <context sub-pattern="3" style-ref="module"/>
-      </include>
-    </context>
-
-    <context id="type-declaration">
-      <match extended="true">
-        (record | data) \s+ (\%{name}) (?!\P{Z})
-      </match>
-      <include>
-        <context sub-pattern="1" style-ref="keyword"/>
-        <context sub-pattern="2" style-ref="type"/>
-      </include>
-    </context>
-
-    <context id="function-type-declaration">
-      <match extended="true">
-        ^\s* (\%{name}) \s+ (:) (?!\P{Z})
-      </match>
-      <include>
-        <context sub-pattern="1" style-ref="function"/>
-        <context sub-pattern="2" style-ref="symbol"/>
-      </include>
-    </context>
-
-    <context id="infix-declaration">
-      <match extended="true">
-        ^\s* (infix[lr]?) \s+ ([0-9]*) \s+ (\%{name}) (?!\P{Z})
-      </match>
-      <include>
-        <context sub-pattern="1" style-ref="keyword"/>
-        <context sub-pattern="2" style-ref="numeric"/>
-        <context sub-pattern="3" style-ref="function"/>
-      </include>
-    </context>
-
     <define-regex id="escaped-character" extended="true">
         \\(                   # leading backslash
         [abfnrtv\\"\'&amp;] | # escaped character
@@ -218,69 +225,357 @@
         RS | US | SP | DEL    # control char names
         )
     </define-regex>
-
-    <context id="string" style-ref="string" end-at-line-end="true" class="string" class-disabled="no-spell-check">
+    <context id="string-literal" style-ref="string" class="string" class-disabled="no-spell-check">
       <start>"</start>
       <end>"</end>
       <include>
-        <context ref="def:line-continue"/>
         <context style-ref="char-escape">
           <match>\%{escaped-character}</match>
         </context>
       </include>
     </context>
-
-    <context id="char" style-ref="character" end-at-line-end="true">
-      <start>'</start>
+    <context id="character-literal" style-ref="character" end-at-line-end="true">
+      <start>\%['</start>
       <end>'</end>
       <include>
         <context style-ref="char-escape" once-only="true">
-          <match>\%{escaped-character}</match>
+          <match>\%{escaped-character}|.</match>
         </context>
-        <context once-only="true" extend-parent="false">
-          <match>.</match>
-        </context>
-        <context style-ref="def:error" extend-parent="false">
+        <context style-ref="error" extend-parent="false">
           <match>.</match>
         </context>
       </include>
     </context>
 
-    <context id="float" style-ref="numeric">
+    <context id="float-literal" style-ref="number">
       <match extended="true">
-        -? [0-9]+ \. [0-9]+ ([eE][+-]?[0-9]+)? |
-        -? [0-9]+            [eE][+-]?[0-9]+
+        \%[
+        (
+          -? [0-9]+ \. [0-9]+ ([eE][+-]?[0-9]+)? |
+          -? [0-9]+            [eE][+-]?[0-9]+
+        )
+        \%]
       </match>
     </context>
-
-    <context id="hexadecimal" style-ref="numeric">
-      <match>-?0[xX][0-9a-fA-F]+</match>
+    <context id="hexadecimal-literal" style-ref="number">
+      <match>\%[-?0[xX][0-9a-fA-F]+\%]</match>
     </context>
-
-    <context id="decimal" style-ref="numeric">
-      <match>-?[0-9]+</match>
+    <context id="decimal-literal" style-ref="number">
+      <match>\%[-?[0-9]+([0-9]+)*\%]</match>
     </context>
-
-    <context id="agda" class="no-spell-check">
+    <context id="number-literal">
+      <include>
+        <context ref="decimal-literal"     style-ref="number"/>
+        <context ref="hexadecimal-literal" style-ref="number"/>
+        <context ref="float-literal"       style-ref="number"/>
+      </include>
+    </context>
+    
+    <context id="record-literal__field-assign" extend-parent="false">
+      <start extended="true">
+        (?&lt;= ; | \{ | ^ )
+        \s*
+        (\%{name}) \s+ (=)
+        \%]
+      </start>
+      <end>\%]\s*(?=;|\})</end>
+      <include>
+        <context sub-pattern="1" where="start" style-ref="field"/>
+        <context sub-pattern="2" where="start" style-ref="symbol"/>
+        <context ref="agda-unit"/>
+      </include>
+    </context>
+    <context id="record-literal">
+      <start extended="true">
+        \s*                    # Or it will become "record-declaration"
+        (\%[ record) \s*
+          (?: \s+ \%{name} \s* )?
+        \{
+      </start>
+      <end>\}</end>
+      <include>
+        <context sub-pattern="1" where="start" style-ref="keyword"/>
+        <context ref="record-literal__field-assign"/>
+        <context ref="agda-unit"/>
+      </include>
+    </context>
+    
+    <context id="agda-meta">
       <include>
         <context ref="line-comment"/>
         <context ref="block-comment-pragma"/>
         <context ref="block-comment"/>
         <context ref="agda-hole"/>
-        <context ref="module-declaration"/>
-        <context ref="import"/>
-        <context ref="open"/>
-        <context ref="type-declaration"/>
-        <context ref="function-type-declaration"/>
-        <context ref="infix-declaration"/>
-        <context ref="agda-const"/>
+      </include>
+    </context>
+    <context id="agda-literal">
+      <include>
+        <context ref="string-literal"/>
+        <context ref="character-literal"/>
+        <context ref="number-literal"/>
+        <context ref="record-literal"/>
+      </include>
+    </context>
+    <context id="agda-key">
+      <include>
+        <context ref="agda-primitive"/>
         <context ref="agda-symbol"/>
         <context ref="agda-keyword"/>
-        <context ref="string"/>
-        <context ref="char"/>
-        <context ref="float"/>
-        <context ref="hexadecimal"/>
-        <context ref="decimal"/>
+      </include>
+    </context>
+    <context id="agda-unit">
+      <include>
+        <context ref="agda-meta"/>
+        <context ref="agda-literal"/>
+        <context ref="agda-key"/>
+      </include>
+    </context>
+
+    <context id="module-declaration">
+      <match>(module)\s+(\%{qualified})\%]</match>
+      <include>
+        <context sub-pattern="1" style-ref="keyword"/>
+        <context sub-pattern="2" style-ref="module"/>
+      </include>
+    </context>
+
+    <context id="import">
+      <match extended="true">
+        \%[(import) \s+
+        (\%{qualified})
+          (?: \s+ (as) \s+ (\%{qualified}) )?
+        \%]
+      </match>
+      <include>
+        <context sub-pattern="1" style-ref="keyword"/>
+        <context sub-pattern="2" style-ref="module"/>
+        <context sub-pattern="3" style-ref="keyword"/>
+        <context sub-pattern="4" style-ref="module"/>
+      </include>
+    </context>
+
+    <context id="open-module">
+      <match extended="true">
+        \%[(open) \s+
+          (?: (import|module) \s+ )?
+        (\%{qualified})
+        \%]
+      </match>
+      <include>
+        <context sub-pattern="1" style-ref="keyword"/>
+        <context sub-pattern="2" style-ref="keyword"/>
+        <context sub-pattern="3" style-ref="module"/>
+      </include>
+    </context>
+
+    <!--
+      <start>
+        ^(\s*)  # the indent
+        ...
+      </start>
+      <end>
+        ^                     # close when the start of line
+        (?!                   # is not followed by
+          \%{1@start}\s+\S |  # a line having enough indent
+          \s*$                # nor a empty line
+        )
+      </end>
+    -->
+
+    <context id="function-type-declaration">
+      <start>^(\s*)(\%{name})\s+(:)\%]</start>
+      <end>^(?!\%{1@start}\s+\S|\s*$)</end>
+      <include>
+        <context sub-pattern="2" where="start" style-ref="function"/>
+        <context sub-pattern="3" where="start" style-ref="symbol"/>
+        <context ref="agda-unit"/>
+      </include>
+    </context>
+
+    <context id="postulate__name" extend-parent="false">
+      <start>^(\s*)(\%{name})\%]</start>
+      <end>^(?!\%{1@start}\s+\S|\s*$)|:</end>
+      <include>
+        <context sub-pattern="2" where="start" style-ref="postulate"/>
+        <context ref="just-name" style-ref="postulate"/>
+      </include>
+    </context>
+    <context id="postulate-declaration">
+      <start extended="true">
+        ^(\s*)
+        (postulate)
+        (?:\s+(\%{name}))?
+        \%]
+      </start>
+      <end>^(?!\%{1@start}\s+\S|\s*$)</end>
+      <include>
+        <context sub-pattern="2" where="start" style-ref="keyword"/>
+        <context sub-pattern="3" where="start" style-ref="postulate"/>
+        <context ref="postulate__name"/>
+        <context ref="agda-unit"/>
+      </include>
+    </context>
+
+    <context id="variable-declaration">
+      <start>^(\s*)(variable)\%]</start>
+      <end>^(?!\%{1@start}\s+\S|\s*$)</end>
+      <include>
+        <context sub-pattern="2" where="start" style-ref="keyword"/>
+        <context ref="agda-unit"/>
+      </include>
+    </context>
+
+    <context id="primitive__name" extend-parent="false">
+      <start>^(\s*)(\%{name})\%]</start>
+      <end>^(?!\%{1@start}\s+\S|\s*$)</end>
+      <include>
+        <context sub-pattern="2" where="start" style-ref="primitive"/>
+        <context ref="agda-unit"/>
+      </include>
+    </context>
+    <context id="primitive-declaration">
+      <start>^(\s*)(primitive)\%]</start>
+      <end>^(?!\%{1@start}\s+\S|\s*$)</end>
+      <include>
+        <context sub-pattern="2" where="start" style-ref="keyword"/>
+        <context ref="primitive__name"/>
+        <context ref="agda-unit"/>
+      </include>
+    </context>
+
+    <context id="datatype__constructor" extend-parent="false">
+      <start extended="true">
+        ^(\s*)
+        (?:(\%{key-keyword})\s+)?
+        (\%{name})
+        \%]
+      </start>
+      <end>^(?!\%{1@start}\s+\S|\s*$)</end>
+      <include>
+        <context sub-pattern="2" where="start" style-ref="keyword"/>
+        <context sub-pattern="3" where="start" style-ref="inductive-constructor"/>
+        <context ref="agda-unit"/>
+      </include>
+    </context>
+    <context id="datatype__name-where" extend-parent="false">
+      <start>(?&lt;=data)\%]</start>
+      <end>(\%[where\%])</end>
+      <include>
+        <context sub-pattern="1" where="end" style-ref="keyword"/>
+        <context ref="first-name" style-ref="datatype"/>
+        <context ref="agda-unit"/>
+      </include>
+    </context>
+    <context id="datatype-declaration">
+      <start>^(\s*)(data)\%]</start>
+      <end>^(?!\%{1@start}\s+\S|\s*$)</end>
+      <include>
+        <context sub-pattern="2" where="start" style-ref="keyword"/>
+        <context ref="datatype__name-where"/>
+        <context ref="datatype__constructor"/>
+        <context ref="agda-unit"/>
+      </include>
+    </context>
+
+    <context id="record__field__name" extend-parent="false">
+      <start>^(\s*)(\%{name})\%]</start>
+      <end>^(?!\%{1@start}\s+\S|\s*$)</end>
+      <include>
+        <context sub-pattern="2" where="start" style-ref="field"/>
+        <context ref="agda-unit"/>
+      </include>
+    </context>
+    <context id="record__field" extend-parent="false">
+      <start extended="true">
+        ^(\s*)
+        (field)
+        (?:\s+(\%{name}))?
+        \%]
+      </start>
+      <end>^(?!\%{1@start}\s+\S|\s*$)</end>
+      <include>
+        <context sub-pattern="2" where="start" style-ref="keyword"/>
+        <context sub-pattern="3" where="start" style-ref="field"/>
+        <context ref="record__field__name"/>
+        <context ref="agda-unit"/>
+      </include>
+    </context>
+    <context id="record__constructor" extend-parent="false">
+      <start extended="true">
+        ^(\s*)
+        (?:(\%{key-keyword})\s+)?
+        (constructor)\%]
+      </start>
+      <end>^(?!\%{1@start}\s+\S|\s*$)</end>
+      <include>
+        <context sub-pattern="2" where="start" style-ref="keyword"/>
+        <context sub-pattern="3" where="start" style-ref="keyword"/>
+        <context ref="just-name" style-ref="inductive-constructor"/>
+        <context ref="agda-unit"/>
+      </include>
+    </context>
+    <context id="record__infix-declaration" extend-parent="false">
+      <start>^(\s*)(infix[lr]?)\%]</start>
+      <end>^(?!\%{1@start}\s+\S|\s*$)</end>
+      <include>
+        <context sub-pattern="2" where="start" style-ref="keyword"/>
+        <context ref="decimal-literal"/>
+        <context ref="just-name" style-ref="field"/>
+      </include>
+    </context>
+    <context id="record__name-where" extend-parent="false">
+      <start>(?&lt;=record)\%]</start>
+      <end>(\%[where\%])</end>
+      <include>
+        <context sub-pattern="1" where="end" style-ref="keyword"/>
+        <context ref="first-name" style-ref="record"/>
+        <context ref="agda-unit"/>
+      </include>
+    </context>
+    <context id="record-declaration">
+      <start>^(\s*)(record)\%]</start>
+      <end>^(?!\%{1@start}\s+\S|\s*$)</end>
+      <include>
+        <context sub-pattern="2" where="start" style-ref="keyword"/>
+        <context ref="record__name-where"/>
+        <context once-only="true" style-ref="keyword">
+          <match>\%[coinductive\%]</match>
+        </context>
+        <context ref="record__constructor"/>
+        <context ref="record__infix-declaration"/>
+        <context ref="record__field"/>
+        <context ref="open-module"/>
+        <context ref="function-type-declaration"/>
+        <context ref="agda-unit"/>
+      </include>
+    </context>
+
+    <context id="infix-declaration">
+      <start>^(\s*)(infix[lr]?)\%]</start>
+      <end>^(?!\%{1@start}\s+\S|\s*$)</end>
+      <include>
+        <context sub-pattern="2" where="start" style-ref="keyword"/>
+        <context ref="decimal-literal"/>
+        <context ref="just-name" style-ref="function"/>
+      </include>
+    </context>
+
+
+    <context id="agda" class="no-spell-check">
+      <include>
+        <context ref="agda-meta"/>
+        <context ref="agda-literal"/>
+        <context ref="module-declaration"/>
+        <context ref="import"/>
+        <context ref="open-module"/>
+        <context ref="postulate-declaration"/>
+        <context ref="datatype-declaration"/>
+        <context ref="record-declaration"/>
+        <context ref="primitive-declaration"/>
+        <context ref="variable-declaration"/>
+        <context ref="function-type-declaration"/>
+        <context ref="infix-declaration"/>
+        <context ref="agda-key"/>
       </include>
     </context>
 
