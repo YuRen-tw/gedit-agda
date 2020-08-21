@@ -117,8 +117,6 @@
       <start>\%[--</start>
       <include>
         <context ref="def:in-comment"/>
-        <context ref="haddock:line-paragraph"/>
-        <context ref="haddock:directive"/>
       </include>
     </context>
 
@@ -127,8 +125,6 @@
       <end>-\}</end>
       <include>
         <context ref="def:in-comment"/>
-        <context ref="haddock:block-paragraph"/>
-        <context ref="haddock:directive"/>
         <context ref="block-comment"/>
       </include>
     </context>
