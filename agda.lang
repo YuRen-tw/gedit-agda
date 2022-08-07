@@ -26,9 +26,9 @@
     https://agda.readthedocs.io/en/latest/language/lexical-structure.html
   -->
   <metadata>
-    <!--<property name="mimetypes">text/x-agda</property>-->
+    <property name="mimetypes">text/x-agda</property>
     <property name="globs">*.agda</property>
-    <property name="line-comment-start">__</property>
+    <property name="line-comment-start">--</property>
     <property name="block-comment-start">{-</property>
     <property name="block-comment-end">-}</property>
   </metadata>
@@ -109,7 +109,7 @@
     <style id="hole" name="Hole" map-to="def:mark"/>
   </styles>
 
-  <keyword-char-class>(?:[^\s;\{\}\(\)"])</keyword-char-class>
+  <keyword-char-class>[^\s;\{\}\(\)"]</keyword-char-class>
 
   <definitions>
   
@@ -181,19 +181,29 @@
       <match>\%[\%{key-primitive-type}\%]</match>
     </context>
 
+    <define-regex id="name-part-char" extended="true">
+      (?! \s | _ | \%{special-symbol} ) .
+    </define-regex>
+    <define-regex id="name-part-first-char" extended="true">
+      (?! \s | _ | \%{special-symbol} | ' | - | \\ ) . |
+      - (?! - )      |
+      \\ (?! \p{L} )    # cannot start with ' , -- , or \x
+    </define-regex>
+    <define-regex id="name-part-start" extended="true">
+      (?&lt;! \%{name-part-char} )
+    </define-regex>
+    <define-regex id="name-part-end" extended="true">
+      (?! \%{name-part-char} )
+    </define-regex>
     <define-regex id="name-part" extended="true">
-      (?&lt;= ^ | [\s\._;\{\}\(\)@"] )
+      \%{name-part-start}
       (?!
         (?: \%{key-symbol} | \%{key-keyword} | \%{key-primitive-type} )
-        (?: [\s\._;\{\}\(\)@"] | $)
+        \%{name-part-end}
       )                          # cannot be one of the keywords above
-      (?:
-           [^\s\._;\{\}\(\)@"'\\-]   |
-        \\ [^\s\._;\{\}\(\)@"\p{L}]  |
-        -  [^\s\._;\{\}\(\)@"-]
-      )                          # cannot start with ' , \x , or --
-      [^\s\._;\{\}\(\)@"] *
-      (?= [\s\._;\{\}\(\)@"] | $)
+      \%{name-part-first-char}
+      \%{name-part-char}*
+      \%{name-part-end}
     </define-regex>
     <define-regex id="name" extended="true">
       _ |
@@ -328,7 +338,7 @@
     </context>
 
     <context id="module-declaration">
-      <match>(module)\s+(\%{qualified})\%]</match>
+      <match>\%[(module)\s+(\%{qualified})\%]</match>
       <include>
         <context sub-pattern="1" style-ref="keyword"/>
         <context sub-pattern="2" style-ref="module"/>
@@ -364,19 +374,19 @@
       </include>
     </context>
 
-    <!--
-      <start>
+    <!-- just an example -->
+    <context id="block">
+      <start extended="true">
         ^(\s*)  # the indent
-        ...
       </start>
-      <end>
+      <end extended="true">
         ^                     # close when the start of line
         (?!                   # is not followed by
           \%{1@start}\s+\S |  # a line having enough indent
           \s*$                # nor a empty line
         )
       </end>
-    -->
+    </context>
 
     <context id="function-type-declaration">
       <start>^(\s*)(\%{name})\s+(:)\%]</start>
