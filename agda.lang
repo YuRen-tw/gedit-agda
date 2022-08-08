@@ -4,7 +4,7 @@
  This file is part of GtkSourceView
 
  Authors: Yu-Ren Pan
- Copyright (C) 2020 Yu-Ren Pan <yuren.pan.0117@gmail.com>
+ Copyright (C) 2020-2022 Yu-Ren Pan <yuren.pan.0117@gmail.com>
 
  GtkSourceView is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -398,158 +398,187 @@
       </include>
     </context>
 
-    <context id="postulate__name" extend-parent="false">
-      <start>^(\s*)(\%{name})\%]</start>
-      <end>^(?!\%{1@start}\s+\S|\s*$)|:</end>
-      <include>
-        <context sub-pattern="2" where="start" style-ref="postulate"/>
-        <context ref="just-name" style-ref="postulate"/>
-      </include>
-    </context>
     <context id="postulate-declaration">
       <start extended="true">
         ^(\s*)
-        (postulate)
-        (?:\s+(\%{name}))?
-        \%]
-      </start>
-      <end>^(?!\%{1@start}\s+\S|\s*$)</end>
-      <include>
-        <context sub-pattern="2" where="start" style-ref="keyword"/>
-        <context sub-pattern="3" where="start" style-ref="postulate"/>
-        <context ref="postulate__name"/>
-        <context ref="agda-unit"/>
-      </include>
-    </context>
-
-    <context id="variable-declaration">
-      <start>^(\s*)(variable)\%]</start>
-      <end>^(?!\%{1@start}\s+\S|\s*$)</end>
-      <include>
-        <context sub-pattern="2" where="start" style-ref="keyword"/>
-        <context ref="agda-unit"/>
-      </include>
-    </context>
-
-    <context id="primitive__name" extend-parent="false">
-      <start>^(\s*)(\%{name})\%]</start>
-      <end>^(?!\%{1@start}\s+\S|\s*$)</end>
-      <include>
-        <context sub-pattern="2" where="start" style-ref="primitive"/>
-        <context ref="agda-unit"/>
-      </include>
-    </context>
-    <context id="primitive-declaration">
-      <start>^(\s*)(primitive)\%]</start>
-      <end>^(?!\%{1@start}\s+\S|\s*$)</end>
-      <include>
-        <context sub-pattern="2" where="start" style-ref="keyword"/>
-        <context ref="primitive__name"/>
-        <context ref="agda-unit"/>
-      </include>
-    </context>
-
-    <context id="datatype__constructor" extend-parent="false">
-      <start extended="true">
-        ^(\s*)
-        (?:(\%{key-keyword})\s+)?
-        (\%{name})
-        \%]
-      </start>
-      <end>^(?!\%{1@start}\s+\S|\s*$)</end>
-      <include>
-        <context sub-pattern="2" where="start" style-ref="keyword"/>
-        <context sub-pattern="3" where="start" style-ref="inductive-constructor"/>
-        <context ref="agda-unit"/>
-      </include>
-    </context>
-    <context id="datatype__name-where" extend-parent="false">
-      <start>(?&lt;=data)\%]</start>
-      <end>(\%[where\%])</end>
-      <include>
-        <context sub-pattern="1" where="end" style-ref="keyword"/>
-        <context ref="first-name" style-ref="datatype"/>
-        <context ref="agda-unit"/>
-      </include>
-    </context>
-    <context id="datatype-declaration">
-      <start>^(\s*)(data)\%]</start>
-      <end>^(?!\%{1@start}\s+\S|\s*$)</end>
-      <include>
-        <context sub-pattern="2" where="start" style-ref="keyword"/>
-        <context ref="datatype__name-where"/>
-        <context ref="datatype__constructor"/>
-        <context ref="agda-unit"/>
-      </include>
-    </context>
-
-    <context id="record__field__name" extend-parent="false">
-      <start>^(\s*)(\%{name})\%]</start>
-      <end>^(?!\%{1@start}\s+\S|\s*$)</end>
-      <include>
-        <context sub-pattern="2" where="start" style-ref="field"/>
-        <context ref="agda-unit"/>
-      </include>
-    </context>
-    <context id="record__field" extend-parent="false">
-      <start extended="true">
-        ^(\s*)
-        (field)
-        (?:\s+(\%{name}))?
-        \%]
-      </start>
-      <end>^(?!\%{1@start}\s+\S|\s*$)</end>
-      <include>
-        <context sub-pattern="2" where="start" style-ref="keyword"/>
-        <context sub-pattern="3" where="start" style-ref="field"/>
-        <context ref="record__field__name"/>
-        <context ref="agda-unit"/>
-      </include>
-    </context>
-    <context id="record__constructor" extend-parent="false">
-      <start extended="true">
-        ^(\s*)
-        (?:(\%{key-keyword})\s+)?
-        (constructor)\%]
+        (?:\%[(\%{key-keyword})\%]\s+)?
+        \%[(postulate)\%]
       </start>
       <end>^(?!\%{1@start}\s+\S|\s*$)</end>
       <include>
         <context sub-pattern="2" where="start" style-ref="keyword"/>
         <context sub-pattern="3" where="start" style-ref="keyword"/>
-        <context ref="just-name" style-ref="inductive-constructor"/>
-        <context ref="agda-unit"/>
-      </include>
-    </context>
-    <context id="record__infix-declaration" extend-parent="false">
-      <start>^(\s*)(infix[lr]?)\%]</start>
-      <end>^(?!\%{1@start}\s+\S|\s*$)</end>
-      <include>
-        <context sub-pattern="2" where="start" style-ref="keyword"/>
-        <context ref="decimal-literal"/>
-        <context ref="just-name" style-ref="field"/>
-      </include>
-    </context>
-    <context id="record__name-where" extend-parent="false">
-      <start>(?&lt;=record)\%]</start>
-      <end>(\%[where\%])</end>
-      <include>
-        <context sub-pattern="1" where="end" style-ref="keyword"/>
-        <context ref="first-name" style-ref="record"/>
-        <context ref="agda-unit"/>
-      </include>
-    </context>
-    <context id="record-declaration">
-      <start>^(\s*)(record)\%]</start>
-      <end>^(?!\%{1@start}\s+\S|\s*$)</end>
-      <include>
-        <context sub-pattern="2" where="start" style-ref="keyword"/>
-        <context ref="record__name-where"/>
-        <context once-only="true" style-ref="keyword">
-          <match>\%[coinductive\%]</match>
+        <context id="postulate__name" extend-parent="false">
+          <start extended="true">
+            ^(\s*)
+            ( (?:\%[\%{name}\%]\s+)+ )
+            (:)\%]
+          </start>
+          <end>^(?!\%{1@start}\s+\S|\s*$)</end>
+          <include>
+            <context sub-pattern="2" where="start" style-ref="postulate"/>
+            <context sub-pattern="3" where="start" style-ref="symbol"/>
+          </include>
         </context>
-        <context ref="record__constructor"/>
-        <context ref="record__infix-declaration"/>
-        <context ref="record__field"/>
+        <context ref="agda-unit"/>
+      </include>
+    </context>
+
+    <context id="variable-declaration">
+      <start extended="true">
+        ^(\s*)
+        (?:\%[(\%{key-keyword})\%]\s+)?
+        \%[(variable)\%]
+      </start>
+      <end>^(?!\%{1@start}\s+\S|\s*$)</end>
+      <include>
+        <context sub-pattern="2" where="start" style-ref="keyword"/>
+        <context sub-pattern="3" where="start" style-ref="keyword"/>
+        <context ref="agda-unit"/>
+      </include>
+    </context>
+
+    <context id="primitive-declaration">
+      <start extended="true">
+        ^(\s*)
+        (?:\%[(\%{key-keyword})\%]\s+)?
+        \%[(primitive)\%]
+      </start>
+      <end>^(?!\%{1@start}\s+\S|\s*$)</end>
+      <include>
+        <context sub-pattern="2" where="start" style-ref="keyword"/>
+        <context sub-pattern="3" where="start" style-ref="keyword"/>
+        <context id="primitive__name" extend-parent="false">
+          <start>^(\s*)\%[(\%{name})\%]</start>
+          <end>^(?!\%{1@start}\s+\S|\s*$)</end>
+          <include>
+            <context sub-pattern="2" where="start" style-ref="primitive"/>
+            <context ref="agda-unit"/>
+          </include>
+        </context>
+        <context ref="agda-unit"/>
+      </include>
+    </context>
+
+    <context id="datatype-declaration">
+      <start extended="true">
+        ^(\s*)
+        (?:\%[(\%{key-keyword})\%]\s+)?
+        \%[(data)\%]
+      </start>
+      <end>^(?!\%{1@start}\s+\S|\s*$)</end>
+      <include>
+        <context sub-pattern="2" where="start" style-ref="keyword"/>
+        <context sub-pattern="3" where="start" style-ref="keyword"/>
+        <context id="datatype__name-where" extend-parent="false">
+          <start>(?&lt;=data)\%]</start>
+          <end>(\%[where\%])</end>
+          <include>
+            <context sub-pattern="1" where="end" style-ref="keyword"/>
+            <context ref="first-name" style-ref="datatype"/>
+            <context ref="agda-unit"/>
+          </include>
+        </context>
+        <context id="datatype__constructor" extend-parent="false">
+          <start extended="true">
+            ^(\s*)
+            (?:(\%{key-keyword})\s+)?
+            (\%{name})
+            \%]
+          </start>
+          <end>^(?!\%{1@start}\s+\S|\s*$)</end>
+          <include>
+            <context sub-pattern="2" where="start" style-ref="keyword"/>
+            <context sub-pattern="3" where="start" style-ref="inductive-constructor"/>
+            <context ref="agda-unit"/>
+          </include>
+        </context>
+        <context ref="agda-unit"/>
+      </include>
+    </context>
+
+    <!--
+      record <recordname> <parameters> : Set <level> where
+        <directives>
+        constructor <constructorname>
+        field
+          <fieldname1> : <type1>
+          <fieldname2> : <type2>
+           ...
+        <declarations>
+    -->
+    <context id="record-declaration">
+      <start extended="true">
+        ^(\s*)
+        (?:\%[(\%{key-keyword})\%]\s+)?
+        \%[(record)\%]
+      </start>
+      <end>^(?!\%{1@start}\s+\S|\s*$)</end>
+      <include>
+        <context sub-pattern="2" where="start" style-ref="keyword"/>
+        <context sub-pattern="3" where="start" style-ref="keyword"/>
+        <context id="record__name-where" extend-parent="false">
+          <start>(?&lt;=\%[record)\%]</start>
+          <end>(\%[where\%])</end>
+          <include>
+            <context sub-pattern="1" where="end" style-ref="keyword"/>
+            <context ref="first-name" style-ref="record"/>
+            <context ref="agda-unit"/>
+          </include>
+        </context>
+        <context id="record__directives" once-only="true" style-ref="keyword">
+          <keyword>eta-equality</keyword>
+          <keyword>no-eta-equality</keyword>
+          <keyword>pattern</keyword>
+          <keyword>inductive</keyword>
+          <keyword>coinductive</keyword>
+          <keyword>coinductive</keyword>
+        </context>
+        <context id="record__constructor" extend-parent="false">
+          <start extended="true">
+            ^(\s*)
+            (?:\%[(\%{key-keyword})\%]\s+)?
+            \%[(constructor)\%]
+          </start>
+          <end>^(?!\%{1@start}\s+\S|\s*$)</end>
+          <include>
+            <context sub-pattern="2" where="start" style-ref="keyword"/>
+            <context sub-pattern="3" where="start" style-ref="keyword"/>
+            <context ref="just-name" style-ref="inductive-constructor"/>
+            <context ref="agda-unit"/>
+          </include>
+        </context>
+        <context id="record__infix-declaration" extend-parent="false">
+          <start>^(\s*)(infix[lr]?)\%]</start>
+          <end>^(?!\%{1@start}\s+\S|\s*$)</end>
+          <include>
+            <context sub-pattern="2" where="start" style-ref="keyword"/>
+            <context ref="decimal-literal"/>
+            <context ref="just-name" style-ref="field"/>
+          </include>
+        </context>
+        <context id="record__field" extend-parent="false">
+          <start extended="true">
+            ^(\s*)
+            (field)
+            (?:\s+(\%{name}))?
+            \%]
+          </start>
+          <end>^(?!\%{1@start}\s+\S|\s*$)</end>
+          <include>
+            <context sub-pattern="2" where="start" style-ref="keyword"/>
+            <context sub-pattern="3" where="start" style-ref="field"/>
+            <context id="record__field__name" extend-parent="false">
+              <start>^(\s*)(\%{name})\%]</start>
+              <end>^(?!\%{1@start}\s+\S|\s*$)</end>
+              <include>
+                <context sub-pattern="2" where="start" style-ref="field"/>
+                <context ref="agda-unit"/>
+              </include>
+            </context>
+            <context ref="agda-unit"/>
+          </include>
+        </context>
         <context ref="open-module"/>
         <context ref="function-type-declaration"/>
         <context ref="agda-unit"/>
@@ -557,7 +586,7 @@
     </context>
 
     <context id="infix-declaration">
-      <start>^(\s*)(infix[lr]?)\%]</start>
+      <start>^(\s*)\%[(infix[lr]?)\%]</start>
       <end>^(?!\%{1@start}\s+\S|\s*$)</end>
       <include>
         <context sub-pattern="2" where="start" style-ref="keyword"/>
